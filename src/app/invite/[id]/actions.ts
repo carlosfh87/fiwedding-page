@@ -20,24 +20,14 @@ export async function inviteValidate({
     redirect("/search-invite");
   }
 
-  const { data: guest, error: errorGuest } = await supabase
+  const { data, error } = await supabase
     .from("invited_guest")
-    .select("id, first_name, last_name, email, confirmed")
-    .eq("id", id)
-    .limit(1);
+    .select("id, first_name, last_name, email, confirmed, invited_group_id")
+    .or(`id.eq.${id},invited_group_id.eq.${id}`);
 
-  if (!errorGuest && guest.length === 1) {
-    return guest;
+  if (error) {
+    redirect("/search-invite");
   }
 
-  const { data: guestGroup, error: errorGroup } = await supabase
-    .from("invited_group")
-    .select("id, first_name, last_name, email, confirmed")
-    .eq("invited_group_id", id);
-
-  if (!errorGroup && guestGroup.length > 0) {
-    return guestGroup;
-  }
-
-  redirect("/search-invite");
+  return data;
 }
