@@ -2,7 +2,7 @@
 
 import { z } from "zod";
 import { redirect } from "next/navigation";
-import { supabase } from "@fiwedding/app/lib/supabase";
+import { supabase } from "@fiwedding/lib/supabase";
 import { type ErrorFormType } from "./type";
 
 const schema = z.object({
